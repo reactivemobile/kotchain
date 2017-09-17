@@ -79,7 +79,7 @@ class Node(difficulty: Int) {
     fun mineAll() {
         for (i in 0..blockChain.size() - 1) {
             mine(blockChain.get(i))
-            propogatePreviousHash(i)
+            propagatePreviousHash(i)
         }
     }
 
@@ -96,14 +96,14 @@ class Node(difficulty: Int) {
     private fun updateHashesFromIndex(index: Int) {
         for (i in index..blockChain.size() - 1) {
             blockChain.get(i).updateHash()
-            propogatePreviousHash(i)
+            propagatePreviousHash(i)
         }
     }
 
     /**
      * Update the 'previousHash' field of the next block with the 'hash' field of this block
      */
-    private fun propogatePreviousHash(index: Int) {
+    private fun propagatePreviousHash(index: Int) {
         if (index < blockChain.size() - 1) {
             blockChain.get(index + 1).previousHash = blockChain.get(index).hash
         }

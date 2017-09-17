@@ -5,7 +5,7 @@ import javax.xml.bind.DatatypeConverter
  * A class representing a single block in a BlockChain
  *
  * @property timestamp When the block was created
- * @property data Some arbitrary data to store in the block
+ * @property data Some arbitrary string data to store in the block
  *
  */
 class Block(val timestamp: Long, var data: String) {

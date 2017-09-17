@@ -46,23 +46,9 @@ fun listenForInput() {
         } else if (input.equals("print", true)) {
             println(node.toString())
         } else if (input.startsWith("update", true)) {
-            if (!input.contains("=") || input.endsWith("=")) {
-                println("Please use the format: Update <block number>=<new data>")
-            } else {
-                val equalIndex = input.indexOf("=")
-                val blockNumber = input.substring(7, equalIndex)
-                val blockInt = blockNumber.toInt()
-                val newData = input.substring(equalIndex + 1)
-                if (node.updateBlockData(blockInt, newData)) {
-                    println("Updated $blockInt with $newData")
-                } else {
-                    println("Error block $blockInt doesn't exist")
-                }
-            }
+            updateBlock(input)
         } else if (input.equals("reset", true)) {
-            node.reset()
-            print("Node reset... ")
-            addGenesisBlock()
+            resetNode()
         } else if (input.equals("mine-all", true)) {
             node.mineAll()
         } else if (input.equals("exit", true)) {
@@ -70,6 +56,28 @@ fun listenForInput() {
         } else {
             println("Sorry I didn't understand\n\n")
             showInstructions()
+        }
+    }
+}
+
+private fun resetNode() {
+    node.reset()
+    print("Node reset... ")
+    addGenesisBlock()
+}
+
+private fun updateBlock(input: String) {
+    if (!input.contains("=") || input.endsWith("=")) {
+        println("Please use the format: Update <block number>=<new data>")
+    } else {
+        val equalIndex = input.indexOf("=")
+        val blockNumber = input.substring(7, equalIndex)
+        val blockInt = blockNumber.toInt()
+        val newData = input.substring(equalIndex + 1)
+        if (node.updateBlockData(blockInt, newData)) {
+            println("Updated $blockInt with $newData")
+        } else {
+            println("Error block $blockInt doesn't exist")
         }
     }
 }
