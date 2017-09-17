@@ -50,7 +50,7 @@ print
 6: Block [data=F hash=0000EC... previousHash=0000C4... nonce=41937]
 7: Block [data=G hash=0000AA... previousHash=0000EC... nonce=28606]
 ```
-You can see each block has been [mined](https://en.bitcoin.it/wiki/Nonce) (each hash has 4 leading zero characters) and a nonce calculated. Note the `previousHash` field of each block matches the `hash` field of the previous block. This is one of the core concepts of the blockchain. If one block is modified then the hash change is propogated up the chain making the following blocks invalid.
+You can see each block has been [mined](https://en.bitcoin.it/wiki/Nonce) (each hash has 4 leading zero characters) and a nonce calculated. Note the `previousHash` field of each block matches the `hash` field of the previous block. This is one of the core concepts of the blockchain. If one block is modified then the hash change is propagated up the chain making the following blocks invalid.
 
 We can validate the integrity of the chain by typing `verify`
 ```
