@@ -1,6 +1,6 @@
 # kotchain
 
-This is a tiny implementation of a[blockchain](https://en.wikipedia.org/wiki/Blockchain)written in Kotlin. It's not representative of a complete system in that it's not distributed. Instead it consists of just a single node, intending to demonstrate the core concept of blockchain technology.
+This is a tiny implementation of a [blockchain](https://en.wikipedia.org/wiki/Blockchain) written in Kotlin. It's not representative of a complete system in that it's not distributed. Instead it consists of just a single node, intending to demonstrate the core concept of blockchain technology.
 
 Running the code in Main.kt creates the node with a blockchain and adds the genesis block. Then you'll see the instructions:
 ```
