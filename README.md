@@ -38,7 +38,7 @@ add G
 Mining Block... Done. Time was 46 nonce is 28606, hash is 0000AAFEB6D3CF2A7374EC07F44FE1E3CFA2EF4F922AB6DC2EE35F006853CD45
 ```
 
-This mined and added 7 blocks to to the blockchain. This can be confirmed by entering:
+This mined and added 7 blocks to to the blockchain. This can be confirmed by entering `print`:
 ```
 print
 0: Block [data=<GENESIS BLOCK> hash=0000B9... previousHash=... nonce=10939]
