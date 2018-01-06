@@ -9,10 +9,10 @@ Instructions
 add <string data>:                         Create a block, mine it and add to the blockchain
 verify:                                    Check the integrity of the blockchain
 print:                                     Show the contents of the entire blockchain
-updateBlockData: <block number>=<data>:    Update the data in a block
+update: <block number>=<data>:             Update the data in a block
 mine-all:                                  Mine all the blocks in the chain
 reset:                                     Remove all blocks from the chain
-exit:   `                                   Exit the demo
+exit:   `                                  Exit the demo
 ```
 Here's a sample interaction with the node:
 ```
@@ -63,7 +63,6 @@ Block 4 is OK
 Block 5 is OK
 Block 6 is OK
 Block 7 is OK
-Blockchain was verified
 ```
 To demonstrate how tampering is clearly detected, use the `update` command to simulate how an attacker might try to change a record.
 ```

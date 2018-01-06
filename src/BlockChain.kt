@@ -27,11 +27,23 @@ class BlockChain {
         return blockChain.last
     }
 
-    override fun toString(): String {
-        val builder: StringBuilder = StringBuilder()
-        for (i in 0..blockChain.size - 1) {
-            builder.append(i).append(": ").append(blockChain[i]).append('\n')
+    /**
+     * Check that the blockchain hasn't been tampered with. We do this by calculating the hash of the block. If it's
+     * not in a 'mined' state (with leading '0' string) then something has modified the contents since it was added.
+     */
+    fun verify(difficultyPrefix: String) {
+        blockChain.onEach { block -> block.updateHash() }
+        blockChain.forEachIndexed { index, block ->
+            if (block.isMined(difficultyPrefix))
+                println("Block $index is OK")
+            else
+                println("Blockchain was compromised at block $index! Hash mismatch.")
         }
+    }
+
+    override fun toString(): String {
+        val builder = StringBuilder()
+        blockChain.forEachIndexed {index, block -> builder.append(index).append(": ").append(block).append('\n') }
         return builder.toString()
     }
 }

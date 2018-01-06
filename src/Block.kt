@@ -8,11 +8,11 @@ import javax.xml.bind.DatatypeConverter
  * @property data Some arbitrary string data to store in the block
  *
  */
-class Block(val timestamp: Long, var data: String) {
+class Block(private val timestamp: Long, var data: String) {
     var previousHash = ""
     var hash = ""
     var nonce = -1
-    val digest = MessageDigest.getInstance("SHA-256")!!
+    private val digest = MessageDigest.getInstance("SHA-256")!!
 
     fun doHash(): String {
         val content = "$timestamp$data$previousHash$nonce"
