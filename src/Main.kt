@@ -2,9 +2,9 @@ import java.util.*
 
 // Difficulty will determine how easily a block can be mined.
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
-val DIFFICULTY = 4
+val difficulty = 4
 
-val node = Node(DIFFICULTY)
+val node = Node(difficulty)
 
 fun main(args: Array<String>) {
     addGenesisBlock()
@@ -22,7 +22,7 @@ private fun showInstructions() {
     println("add <string data>:                         Create a block, mine it and add to the blockchain")
     println("verify:                                    Check the integrity of the blockchain")
     println("print:                                     Show the contents of the entire blockchain")
-    println("updateBlockData: <block number>=<data>:    Update the data in a block")
+    println("update:  <block number>=<data>:            Update the data in a block")
     println("mine-all:                                  Mine all the blocks in the chain")
     println("reset:                                     Remove all blocks from the chain")
     println("exit:                                      Exit the demo")

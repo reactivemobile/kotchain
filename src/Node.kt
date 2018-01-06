@@ -3,8 +3,8 @@
  */
 class Node(difficulty: Int) {
 
-    val difficultyPrefix = "0".repeat(difficulty)
-    val blockChain: BlockChain = BlockChain();
+    private val difficultyPrefix = "0".repeat(difficulty)
+    private val blockChain: BlockChain = BlockChain()
 
     /**
      * Add a block. If it's not the first block to be added we update the 'previousHash' field.
@@ -32,38 +32,20 @@ class Node(difficulty: Int) {
         if (index > 0 && index < blockChain.size()) {
             blockChain.get(index).data = newData
             updateHashesFromIndex(index)
-            return true;
+            return true
         }
-        return false;
+        return false
     }
 
-    /**
-     * Check that the blockchain hasn't been tampered with. We do this by calculating the hash of the block. If it's
-     * not in a 'mined' state (with leading '0' string) then something has modified the contents since it was added.
-     */
     fun verify() {
-        var isOK = true
-        for (i in 0..blockChain.size() - 1) {
-            val currentBlock = blockChain.get(i)
-            currentBlock.updateHash()
-
-            if (!currentBlock.isMined(difficultyPrefix)) {
-                println("Blockchain was compromised at block $i! Hash mismatch.")
-                isOK = false
-            } else {
-                println("Block $i is OK")
-            }
-        }
-        if (isOK) {
-            println("Blockchain was verified")
-        }
+        blockChain.verify(difficultyPrefix)
     }
 
     /**
      * Mine a block. This increments the nonce field until the resultant hash begins with a series of '0'
      * characters. The number if zeros needed is set by the difficulty parameter
      */
-    fun mine(block: Block) {
+    private fun mine(block: Block) {
         val startTime = System.currentTimeMillis()
         print("Mining Block...")
         while (!block.isMined(difficultyPrefix)) {
@@ -77,7 +59,7 @@ class Node(difficulty: Int) {
      * Mine all the blocks in the chain
      */
     fun mineAll() {
-        for (i in 0..blockChain.size() - 1) {
+        for (i in 0 until blockChain.size()) {
             mine(blockChain.get(i))
             propagatePreviousHash(i)
         }
@@ -94,7 +76,7 @@ class Node(difficulty: Int) {
      * Iterate through the chain from the start index updating the hashes and previous hashes of the blocks
      */
     private fun updateHashesFromIndex(index: Int) {
-        for (i in index..blockChain.size() - 1) {
+        for (i in index until blockChain.size()) {
             blockChain.get(i).updateHash()
             propagatePreviousHash(i)
         }
