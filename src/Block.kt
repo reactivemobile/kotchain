@@ -14,7 +14,7 @@ class Block(private val timestamp: Long, var data: String) {
     var nonce = -1
     private val digest = MessageDigest.getInstance("SHA-256")!!
 
-    fun doHash(): String {
+    private fun doHash(): String {
         val content = "$timestamp$data$previousHash$nonce"
         digest.update(content.toByteArray(Charsets.UTF_8))
         val hashBytes = digest.digest()
