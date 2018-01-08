@@ -10,7 +10,7 @@ class Node(difficulty: Int) {
      * Add a block. If it's not the first block to be added we update the 'previousHash' field.
      */
     fun add(block: Block) {
-        if (blockChain.size() > 0) {
+        if (blockChain.size > 0) {
             block.previousHash = blockChain.last().hash
         }
         mine(block)
@@ -21,7 +21,7 @@ class Node(difficulty: Int) {
      * Reset the block to its initial state
      */
     fun reset() {
-        blockChain.reset()
+        blockChain.clear()
     }
 
     /**
@@ -29,7 +29,7 @@ class Node(difficulty: Int) {
      * Afterwards we propogate the hash changes up the chain.
      */
     fun updateBlockData(index: Int, newData: String): Boolean {
-        if (index > 0 && index < blockChain.size()) {
+        if (index in 0..blockChain.size) {
             blockChain.get(index).data = newData
             updateHashesFromIndex(index)
             return true
@@ -59,9 +59,9 @@ class Node(difficulty: Int) {
      * Mine all the blocks in the chain
      */
     fun mineAll() {
-        for (i in 0 until blockChain.size()) {
-            mine(blockChain.get(i))
-            propagatePreviousHash(i)
+        blockChain.forEachIndexed { index, block ->
+            mine(block)
+            propagatePreviousHash(index)
         }
     }
 
@@ -76,7 +76,8 @@ class Node(difficulty: Int) {
      * Iterate through the chain from the start index updating the hashes and previous hashes of the blocks
      */
     private fun updateHashesFromIndex(index: Int) {
-        for (i in index until blockChain.size()) {
+        blockChain.forEach { }
+        for (i in index until blockChain.size) {
             blockChain.get(i).updateHash()
             propagatePreviousHash(i)
         }
@@ -86,7 +87,7 @@ class Node(difficulty: Int) {
      * Update the 'previousHash' field of the next block with the 'hash' field of this block
      */
     private fun propagatePreviousHash(index: Int) {
-        if (index < blockChain.size() - 1) {
+        if (index < blockChain.size - 1) {
             blockChain.get(index + 1).previousHash = blockChain.get(index).hash
         }
     }
