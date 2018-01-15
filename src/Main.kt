@@ -4,7 +4,7 @@ import java.util.*
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
 val difficulty = 4
 
-val node = Node(difficulty)
+val daemon = Daemon(difficulty)
 
 fun main(args: Array<String>) {
     addGenesisBlock()
@@ -29,7 +29,7 @@ private fun showInstructions() {
 }
 
 fun addBlock(data: String) {
-    node.add(Block(System.currentTimeMillis(), data))
+    daemon.add(data)
 }
 
 fun listenForInput() {
@@ -42,15 +42,15 @@ fun listenForInput() {
         if (input.startsWith("add ", true)) {
             addBlock(input.substring(4))
         } else if (input.equals("verify", true)) {
-            node.verify()
+            daemon.verify()
         } else if (input.equals("print", true)) {
-            println(node.toString())
+            daemon.printString()
         } else if (input.startsWith("update", true)) {
             updateBlock(input)
         } else if (input.equals("reset", true)) {
             resetNode()
         } else if (input.equals("mine-all", true)) {
-            node.mineAll()
+            daemon.mineAll()
         } else if (input.equals("exit", true)) {
             break
         } else {
@@ -61,7 +61,7 @@ fun listenForInput() {
 }
 
 private fun resetNode() {
-    node.reset()
+    daemon.reset()
     print("Node reset... ")
     addGenesisBlock()
 }
@@ -74,7 +74,7 @@ private fun updateBlock(input: String) {
         val blockNumber = input.substring(7, equalIndex)
         val blockInt = blockNumber.toInt()
         val newData = input.substring(equalIndex + 1)
-        if (node.updateBlockData(blockInt, newData)) {
+        if (daemon.updateBlockData(blockInt, newData)) {
             println("Updated $blockInt with $newData")
         } else {
             println("Error block $blockInt doesn't exist")

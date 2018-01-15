@@ -1,7 +1,7 @@
 /**
  * A Node holds a single blockchain and performs operations on it
  */
-class Node(difficulty: Int) {
+class Node(difficulty: Int, val name: String) {
 
     private val difficultyPrefix = "0".repeat(difficulty)
     private val blockChain: BlockChain = BlockChain()
@@ -26,11 +26,11 @@ class Node(difficulty: Int) {
 
     /**
      * Update the block at the specific index with the new data.
-     * Afterwards we propogate the hash changes up the chain.
+     * Afterwards we propagate the hash changes up the chain.
      */
     fun updateBlockData(index: Int, newData: String): Boolean {
-        if (index in 0..blockChain.size) {
-            blockChain.get(index).data = newData
+        if (index in 0 until blockChain.size) {
+            blockChain[index].data = newData
             updateHashesFromIndex(index)
             return true
         }
@@ -38,7 +38,9 @@ class Node(difficulty: Int) {
     }
 
     fun verify() {
+        println("Verifying $name")
         blockChain.verify(difficultyPrefix)
+        println()
     }
 
     /**
@@ -47,7 +49,7 @@ class Node(difficulty: Int) {
      */
     private fun mine(block: Block) {
         val startTime = System.currentTimeMillis()
-        print("Mining Block...")
+        print("$name is Mining Block...")
         while (!block.isMined(difficultyPrefix)) {
             block.nonce++
             block.updateHash()
@@ -76,9 +78,8 @@ class Node(difficulty: Int) {
      * Iterate through the chain from the start index updating the hashes and previous hashes of the blocks
      */
     private fun updateHashesFromIndex(index: Int) {
-        blockChain.forEach { }
         for (i in index until blockChain.size) {
-            blockChain.get(i).updateHash()
+            blockChain[i].updateHash()
             propagatePreviousHash(i)
         }
     }
@@ -87,9 +88,12 @@ class Node(difficulty: Int) {
      * Update the 'previousHash' field of the next block with the 'hash' field of this block
      */
     private fun propagatePreviousHash(index: Int) {
-        if (index < blockChain.size - 1) {
-            blockChain.get(index + 1).previousHash = blockChain.get(index).hash
-        }
+        if (index in 0 until blockChain.size)
+            propagateHashForward(blockChain[index + 1], blockChain[index])
+    }
+
+    private fun propagateHashForward(block: Block, previousBlock: Block) {
+        block.previousHash = previousBlock.hash
     }
 }
 

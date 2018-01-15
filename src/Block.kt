@@ -1,5 +1,6 @@
 import java.security.MessageDigest
 import javax.xml.bind.DatatypeConverter
+import kotlin.math.min
 
 /**
  * A class representing a single block in a BlockChain
@@ -33,9 +34,8 @@ class Block(private val timestamp: Long, var data: String) {
      * Get basic block details including truncated versions of the hash and previousHash
      */
     override fun toString(): String {
-
         return "Block [data=$data hash=${hash.substring(0, 6)}..." +
-                " previousHash=${if (previousHash.length >= 6) previousHash.substring(0, 6) else previousHash}... " +
+                " previousHash=${previousHash.substring(0 until min(previousHash.length, 6)) }... " +
                 "nonce=$nonce]"
     }
 }

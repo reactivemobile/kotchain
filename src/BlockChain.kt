@@ -13,9 +13,9 @@ class BlockChain : LinkedList<Block>() {
         forEachIndexed { index, block ->
             block.updateHash()
             if (block.isMined(difficultyPrefix))
-                println("Block $index is OK")
+                println("   Block $index is OK")
             else
-                println("Blockchain was compromised at block $index! Hash mismatch.")
+                println("   Blockchain was compromised at block $index! Hash mismatch.")
         }
     }
 
