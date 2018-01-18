@@ -1,16 +1,10 @@
 class Daemon(difficulty: Int) {
-    val count = 5;
-    private val nodes: ArrayList<Node> = ArrayList(count)
-
-    init {
-        for (i in 1..count) {
-            nodes.add(Node(difficulty, "Node $i"))
-        }
-    }
+    private val count = 5;
+    private val nodes: Array<Node> = Array(count) { i -> Node(difficulty, "Node $i")}
 
     fun add(data: String) {
         val time = System.currentTimeMillis()
-        nodes.forEach({ node -> node.add(Block(time, data)) })
+        nodes.forEach({ node -> node += (Block(time, data)) })
     }
 
     fun verify() {

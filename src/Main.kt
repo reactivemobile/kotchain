@@ -2,7 +2,7 @@ import java.util.*
 
 // Difficulty will determine how easily a block can be mined.
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
-val difficulty = 4
+val difficulty = 5
 
 val daemon = Daemon(difficulty)
 

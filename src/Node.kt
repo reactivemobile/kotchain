@@ -1,7 +1,9 @@
+import java.util.*
+
 /**
  * A Node holds a single blockchain and performs operations on it
  */
-class Node(difficulty: Int, val name: String) {
+class Node(difficulty: Int, val nodeName: String) {
 
     private val difficultyPrefix = "0".repeat(difficulty)
     private val blockChain: BlockChain = BlockChain()
@@ -9,12 +11,12 @@ class Node(difficulty: Int, val name: String) {
     /**
      * Add a block. If it's not the first block to be added we update the 'previousHash' field.
      */
-    fun add(block: Block) {
+    operator fun plusAssign(block: Block) {
         if (blockChain.size > 0) {
             block.previousHash = blockChain.last().hash
         }
         mine(block)
-        blockChain.add(block)
+        blockChain += block
     }
 
     /**
@@ -38,7 +40,7 @@ class Node(difficulty: Int, val name: String) {
     }
 
     fun verify() {
-        println("Verifying $name")
+        println("Verifying $nodeName")
         blockChain.verify(difficultyPrefix)
         println()
     }
@@ -48,13 +50,26 @@ class Node(difficulty: Int, val name: String) {
      * characters. The number if zeros needed is set by the difficulty parameter
      */
     private fun mine(block: Block) {
-        val startTime = System.currentTimeMillis()
-        print("$name is Mining Block...")
-        while (!block.isMined(difficultyPrefix)) {
-            block.nonce++
-            block.updateHash()
-        }
-        println(" Done. Time was ${System.currentTimeMillis() - startTime} nonce is ${block.nonce}, hash is ${block.hash}")
+        object : Thread() {
+            override fun run() {
+                val startTime = System.currentTimeMillis()
+                addRandomDelay()
+                println("$nodeName is Mining Block...")
+                while (!block.isMined(difficultyPrefix)) {
+                    block.nonce++
+                    block.updateHash()
+                }
+                println("$nodeName is done. Time was ${System.currentTimeMillis() - startTime} nonce is ${block.nonce}, hash is ${block.hash}")
+            }
+
+            private fun addRandomDelay() {
+                object : Thread() {
+                    override fun run() {
+                        Thread.sleep(Random().nextInt(5000).toLong())
+                    }
+                }
+            }
+        }.start()
     }
 
     /**
@@ -71,7 +86,7 @@ class Node(difficulty: Int, val name: String) {
      * Get the contents of the blockchain as a String
      */
     override fun toString(): String {
-        return blockChain.toString()
+        return nodeName + blockChain
     }
 
     /**
@@ -88,7 +103,7 @@ class Node(difficulty: Int, val name: String) {
      * Update the 'previousHash' field of the next block with the 'hash' field of this block
      */
     private fun propagatePreviousHash(index: Int) {
-        if (index in 0 until blockChain.size)
+        if (index in 0 until blockChain.size - 1)
             propagateHashForward(blockChain[index + 1], blockChain[index])
     }
 
