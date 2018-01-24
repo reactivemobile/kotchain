@@ -9,10 +9,10 @@ import kotlin.math.min
  * @property data Some arbitrary string data to store in the block
  *
  */
-class Block(private val timestamp: Long, var data: String) {
+class Block(val index: Int, private val timestamp: Long, var data: String, val difficultyPrefix: String) {
     var previousHash = ""
     var hash = ""
-    var nonce = -1
+    private var nonce = -1
     private val digest = MessageDigest.getInstance("SHA-256")!!
 
     private fun doHash(): String {
@@ -26,8 +26,27 @@ class Block(private val timestamp: Long, var data: String) {
         hash = doHash()
     }
 
-    fun isMined(difficultyPrefix: String): Boolean {
+    /**
+     * Mine a block. This increments the nonce field until the resultant hash begins with a series of '0'
+     * characters. The number if zeros needed is set by the difficulty parameter
+     */
+    fun mine() {
+        while (!isMined(difficultyPrefix)) {
+            nonce++
+            updateHash()
+        }
+    }
+
+    private fun isMined(difficultyPrefix: String): Boolean {
         return hash.startsWith(difficultyPrefix)
+    }
+
+    fun getMinedState() {
+        updateHash()
+        if (isMined(hash))
+            println("   Block $index is OK")
+        else
+            println("   Blockchain was compromised at block $index! Hash mismatch.")
     }
 
     /**

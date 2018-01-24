@@ -1,10 +1,10 @@
-class Daemon(difficulty: Int) {
-    private val count = 5;
-    private val nodes: Array<Node> = Array(count) { i -> Node(difficulty, "Node $i")}
+class Daemon(difficulty: Int) : OperationCallback {
+    private val count = 10
+    private val nodes: Array<Node> = Array(count) { index -> Node(difficulty, index, this) }
 
     fun add(data: String) {
         val time = System.currentTimeMillis()
-        nodes.forEach({ node -> node += (Block(time, data)) })
+        nodes.forEachIndexed({ index, node -> node.add(index, time, data) })
     }
 
     fun verify() {
@@ -30,5 +30,14 @@ class Daemon(difficulty: Int) {
     fun printString() {
         nodes.forEach { node -> println(node.toString()) }
     }
+
+    override fun blockMined(nodeIn: Node, block: Block) {
+        println("Node ${nodeIn.nodeName} mined first! Cancelling the others")
+        nodes.forEach { node -> if (nodeIn != node) node.cancel(block) }
+    }
+}
+
+interface OperationCallback {
+    fun blockMined(nodeIn: Node, block: Block)
 }
 

@@ -3,19 +3,23 @@ import java.util.*
 /**
  * A Node holds a single blockchain and performs operations on it
  */
-class Node(difficulty: Int, val nodeName: String) {
+class Node(difficulty: Int, val nodeName: Int, val callback: OperationCallback) {
 
     private val difficultyPrefix = "0".repeat(difficulty)
     private val blockChain: BlockChain = BlockChain()
 
+    private var thread: Thread? = null
+
     /**
      * Add a block. If it's not the first block to be added we update the 'previousHash' field.
      */
-    operator fun plusAssign(block: Block) {
-        if (blockChain.size > 0) {
-            block.previousHash = blockChain.last().hash
-        }
+    fun add(index: Int, timestamp: Long, data: String) {
+        val block = Block(index, timestamp, data, difficultyPrefix)
         mine(block)
+    }
+
+    fun cancel(block: Block) {
+        thread?.stop();
         blockChain += block
     }
 
@@ -24,6 +28,10 @@ class Node(difficulty: Int, val nodeName: String) {
      */
     fun reset() {
         blockChain.clear()
+    }
+
+    fun notifyBlockMined(block: Block) {
+        callback.blockMined(this, block)
     }
 
     /**
@@ -41,35 +49,38 @@ class Node(difficulty: Int, val nodeName: String) {
 
     fun verify() {
         println("Verifying $nodeName")
-        blockChain.verify(difficultyPrefix)
+        blockChain.verify()
         println()
     }
 
     /**
-     * Mine a block. This increments the nonce field until the resultant hash begins with a series of '0'
-     * characters. The number if zeros needed is set by the difficulty parameter
+     * Mine a block
      */
     private fun mine(block: Block) {
-        object : Thread() {
+        thread = object : Thread() {
             override fun run() {
                 val startTime = System.currentTimeMillis()
-                addRandomDelay()
+                addDelay(nodeName)
                 println("$nodeName is Mining Block...")
-                while (!block.isMined(difficultyPrefix)) {
-                    block.nonce++
-                    block.updateHash()
+                if (blockChain.size > 0) {
+                    block.previousHash = blockChain.last().hash
                 }
-                println("$nodeName is done. Time was ${System.currentTimeMillis() - startTime} nonce is ${block.nonce}, hash is ${block.hash}")
+                block.mine()
+                blockChain += block
+                notifyBlockMined(block);
+                println("$nodeName is done. Time was ${System.currentTimeMillis() - startTime} Block: $block")
             }
 
-            private fun addRandomDelay() {
+            private fun addDelay(duration: Int) {
                 object : Thread() {
                     override fun run() {
-                        Thread.sleep(Random().nextInt(5000).toLong())
+                        sleep(((duration + 1) * 1000L))
                     }
                 }
             }
-        }.start()
+        }
+
+        (thread as Thread).start()
     }
 
     /**
@@ -86,7 +97,7 @@ class Node(difficulty: Int, val nodeName: String) {
      * Get the contents of the blockchain as a String
      */
     override fun toString(): String {
-        return nodeName + blockChain
+        return nodeName.toString() + " " + blockChain
     }
 
     /**
