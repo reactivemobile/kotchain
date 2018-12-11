@@ -1,8 +1,10 @@
+package kotchain
+
 import java.util.*
 
 // Difficulty will determine how easily a block can be mined.
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
-val difficulty = 4
+const val difficulty = 4
 
 val node = Node(difficulty)
 
@@ -32,32 +34,35 @@ fun addBlock(data: String) {
     node.add(Block(System.currentTimeMillis(), data))
 }
 
+
 fun listenForInput() {
     val inputScanner = Scanner(System.`in`)
     while (true) {
-        print("> ")
-
-        val input = inputScanner.nextLine()
-
-        if (input.startsWith("add ", true)) {
-            addBlock(input.substring(4))
-        } else if (input.equals("verify", true)) {
-            node.verify()
-        } else if (input.equals("print", true)) {
-            println(node.toString())
-        } else if (input.startsWith("update", true)) {
-            updateBlock(input)
-        } else if (input.equals("reset", true)) {
-            resetNode()
-        } else if (input.equals("mine-all", true)) {
-            node.mineAll()
-        } else if (input.equals("exit", true)) {
-            break
-        } else {
-            println("Sorry I didn't understand\n\n")
-            showInstructions()
+        if (inputScanner.hasNextLine()) {
+            val input: String = inputScanner.nextLine()
+            if (input.isNotEmpty()) {
+                when {
+                    input.startsWith("add ", true) -> addBlock(input.substring(4))
+                    input.equals("verify", true) -> node.verify()
+                    input.equals("print", true) -> println(node.toString())
+                    input.startsWith("update", true) -> updateBlock(input)
+                    input.equals("reset", true) -> resetNode()
+                    input.equals("mine-all", true) -> node.mineAll()
+                    input.equals("exit", true) -> return
+                    else -> showUnknownCommand("B:$input")
+                }
+                listenForInput()
+            } else {
+                showUnknownCommand("A:$input")
+                listenForInput()
+            }
         }
     }
+}
+
+private fun showUnknownCommand(command: String) {
+    println("Sorry I didn't understand [$command]\n\n")
+    showInstructions()
 }
 
 private fun resetNode() {

@@ -1,3 +1,5 @@
+package kotchain
+
 import java.security.MessageDigest
 import javax.xml.bind.DatatypeConverter
 
@@ -9,9 +11,12 @@ import javax.xml.bind.DatatypeConverter
  *
  */
 class Block(private val timestamp: Long, var data: String) {
-    var previousHash = ""
-    var hash = ""
-    var nonce = -1
+    private val HASH_UNSET = "Hash unset"
+    private val NONCE_UNSET = -1
+
+    var previousHash = HASH_UNSET
+    var hash = HASH_UNSET
+    var nonce = NONCE_UNSET
     private val digest = MessageDigest.getInstance("SHA-256")!!
 
     private fun doHash(): String {
@@ -33,7 +38,6 @@ class Block(private val timestamp: Long, var data: String) {
      * Get basic block details including truncated versions of the hash and previousHash
      */
     override fun toString(): String {
-
         return "Block [data=$data hash=${hash.substring(0, 6)}..." +
                 " previousHash=${if (previousHash.length >= 6) previousHash.substring(0, 6) else previousHash}... " +
                 "nonce=$nonce]"

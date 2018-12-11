@@ -1,3 +1,5 @@
+package kotchain
+
 /**
  * A Node holds a single blockchain and performs operations on it
  */
@@ -30,7 +32,7 @@ class Node(difficulty: Int) {
      */
     fun updateBlockData(index: Int, newData: String): Boolean {
         if (index in 0..blockChain.size) {
-            blockChain.get(index).data = newData
+            blockChain[index].data = newData
             updateHashesFromIndex(index)
             return true
         }
@@ -76,9 +78,8 @@ class Node(difficulty: Int) {
      * Iterate through the chain from the start index updating the hashes and previous hashes of the blocks
      */
     private fun updateHashesFromIndex(index: Int) {
-        blockChain.forEach { }
         for (i in index until blockChain.size) {
-            blockChain.get(i).updateHash()
+            blockChain[i].updateHash()
             propagatePreviousHash(i)
         }
     }
@@ -88,7 +89,7 @@ class Node(difficulty: Int) {
      */
     private fun propagatePreviousHash(index: Int) {
         if (index < blockChain.size - 1) {
-            blockChain.get(index + 1).previousHash = blockChain.get(index).hash
+            blockChain[index + 1].previousHash = blockChain[index].hash
         }
     }
 }
