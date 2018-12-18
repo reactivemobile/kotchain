@@ -1,12 +1,19 @@
 package kotchain
 
-import java.util.*
-
 // Difficulty will determine how easily a block can be mined.
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
-const val difficulty = 4
+private const val difficulty = 5
 
-val node = Node(difficulty)
+private const val command_add = "add "
+private const val command_exit = "exit"
+private const val command_verify = "verify"
+private const val command_print = "print"
+private const val command_update = "update "
+private const val command_reset = "reset"
+private const val command_mine_all = "mine-all"
+private const val equals_sign = "="
+
+private val node = Node(difficulty)
 
 fun main(args: Array<String>) {
     addGenesisBlock()
@@ -19,6 +26,62 @@ private fun addGenesisBlock() {
     addBlock("<GENESIS BLOCK>")
 }
 
+private fun listenForInput() {
+    var input: String?
+    do {
+        input = readLine()
+        input?.let {
+            handleInput(input)
+        }
+    } while (input != command_exit)
+}
+
+private fun handleInput(input: String) {
+    when {
+        input == command_verify -> verify()
+        input == command_print -> print()
+        input == command_reset -> reset()
+        input == command_mine_all -> mineAll()
+        input == command_exit -> return
+        input.startsWith(command_add) -> addBlock(input)
+        input.startsWith(command_update) -> updateBlock(input)
+        else -> println("Sorry I didn't understand\n")
+    }
+}
+
+private fun mineAll() {
+    node.mineAll()
+}
+
+private fun print() {
+    println(node.toString())
+}
+
+private fun verify() {
+    node.verify()
+}
+
+private fun addBlock(input: String) {
+    val data = input.substringAfter(command_add)
+    node.add(Block(System.currentTimeMillis(), data))
+}
+
+private fun reset() {
+    node.reset()
+    print("Node reset... ")
+    addGenesisBlock()
+}
+
+private fun updateBlock(input: String) {
+    val blockInt = input.substringAfter(command_update).substringBefore(equals_sign).toInt()
+    val newData = input.substringAfter(equals_sign)
+    if (node.updateBlockData(blockInt, newData)) {
+        println("Updated $blockInt with $newData")
+    } else {
+        println("Error block $blockInt doesn't exist")
+    }
+}
+
 private fun showInstructions() {
     println("\nInstructions\n------------")
     println("add <string data>:                         Create a block, mine it and add to the blockchain")
@@ -28,62 +91,5 @@ private fun showInstructions() {
     println("mine-all:                                  Mine all the blocks in the chain")
     println("reset:                                     Remove all blocks from the chain")
     println("exit:                                      Exit the demo")
-}
-
-fun addBlock(data: String) {
-    node.add(Block(System.currentTimeMillis(), data))
-}
-
-
-fun listenForInput() {
-    val inputScanner = Scanner(System.`in`)
-    while (true) {
-        if (inputScanner.hasNextLine()) {
-            val input: String = inputScanner.nextLine()
-            if (input.isNotEmpty()) {
-                when {
-                    input.startsWith("add ", true) -> addBlock(input.substring(4))
-                    input.equals("verify", true) -> node.verify()
-                    input.equals("print", true) -> println(node.toString())
-                    input.startsWith("update", true) -> updateBlock(input)
-                    input.equals("reset", true) -> resetNode()
-                    input.equals("mine-all", true) -> node.mineAll()
-                    input.equals("exit", true) -> return
-                    else -> showUnknownCommand("B:$input")
-                }
-                listenForInput()
-            } else {
-                showUnknownCommand("A:$input")
-                listenForInput()
-            }
-        }
-    }
-}
-
-private fun showUnknownCommand(command: String) {
-    println("Sorry I didn't understand [$command]\n\n")
-    showInstructions()
-}
-
-private fun resetNode() {
-    node.reset()
-    print("Node reset... ")
-    addGenesisBlock()
-}
-
-private fun updateBlock(input: String) {
-    if (!input.contains("=") || input.endsWith("=")) {
-        println("Please use the format: Update <block number>=<new data>")
-    } else {
-        val equalIndex = input.indexOf("=")
-        val blockNumber = input.substring(7, equalIndex)
-        val blockInt = blockNumber.toInt()
-        val newData = input.substring(equalIndex + 1)
-        if (node.updateBlockData(blockInt, newData)) {
-            println("Updated $blockInt with $newData")
-        } else {
-            println("Error block $blockInt doesn't exist")
-        }
-    }
 }
 

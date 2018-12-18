@@ -11,12 +11,12 @@ import javax.xml.bind.DatatypeConverter
  *
  */
 class Block(private val timestamp: Long, var data: String) {
-    private val HASH_UNSET = "Hash unset"
-    private val NONCE_UNSET = -1
+    private val hashUnset = ""
+    private val nonceUnset = -1
 
-    var previousHash = HASH_UNSET
-    var hash = HASH_UNSET
-    var nonce = NONCE_UNSET
+    var previousHash = hashUnset
+    var hash = hashUnset
+    var nonce = nonceUnset
     private val digest = MessageDigest.getInstance("SHA-256")!!
 
     private fun doHash(): String {
