@@ -1,3 +1,8 @@
+package kotchain
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
 /**
  * A Node holds a single blockchain and performs operations on it
  */
@@ -30,7 +35,7 @@ class Node(difficulty: Int) {
      */
     fun updateBlockData(index: Int, newData: String): Boolean {
         if (index in 0..blockChain.size) {
-            blockChain.get(index).data = newData
+            blockChain[index].data = newData
             updateHashesFromIndex(index)
             return true
         }
@@ -46,13 +51,18 @@ class Node(difficulty: Int) {
      * characters. The number if zeros needed is set by the difficulty parameter
      */
     private fun mine(block: Block) {
-        val startTime = System.currentTimeMillis()
-        print("Mining Block...")
-        while (!block.isMined(difficultyPrefix)) {
-            block.nonce++
-            block.updateHash()
+        GlobalScope.launch {
+            val startTime = System.currentTimeMillis()
+            while (!block.isMined(difficultyPrefix)) {
+                block.nonce++
+                block.updateHash()
+                if (block.nonce % 100000 == 0) {
+                    print("#")
+                }
+            }
+            println(" Done. Time was ${System.currentTimeMillis() - startTime} nonce is ${block.nonce}, hash is ${block.hash}")
         }
-        println(" Done. Time was ${System.currentTimeMillis() - startTime} nonce is ${block.nonce}, hash is ${block.hash}")
+        print("Mining block ")
     }
 
     /**
@@ -76,9 +86,8 @@ class Node(difficulty: Int) {
      * Iterate through the chain from the start index updating the hashes and previous hashes of the blocks
      */
     private fun updateHashesFromIndex(index: Int) {
-        blockChain.forEach { }
         for (i in index until blockChain.size) {
-            blockChain.get(i).updateHash()
+            blockChain[i].updateHash()
             propagatePreviousHash(i)
         }
     }
@@ -88,7 +97,7 @@ class Node(difficulty: Int) {
      */
     private fun propagatePreviousHash(index: Int) {
         if (index < blockChain.size - 1) {
-            blockChain.get(index + 1).previousHash = blockChain.get(index).hash
+            blockChain[index + 1].previousHash = blockChain[index].hash
         }
     }
 }
