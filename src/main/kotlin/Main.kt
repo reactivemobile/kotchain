@@ -16,8 +16,8 @@ private const val equals_sign = "="
 private val node = Node(difficulty)
 
 fun main(args: Array<String>) {
-    addGenesisBlock()
     showInstructions()
+    addGenesisBlock()
     listenForInput()
 }
 
