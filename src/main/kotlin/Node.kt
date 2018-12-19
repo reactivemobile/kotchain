@@ -1,9 +1,5 @@
 package kotchain
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlin.system.measureTimeMillis
-
 /**
  * A Node holds a single blockchain and performs operations on it
  */
@@ -52,18 +48,14 @@ class Node(difficulty: Int) {
      * characters. The number if zeros needed is set by the difficulty parameter
      */
     private fun mine(block: Block) {
-        GlobalScope.launch {
-            val timeTaken = measureTimeMillis {
-                while (!block.isMined(difficultyPrefix)) {
-                    block.nonce++
-                    block.updateHash()
-                    print("...\r")
-                    print("   \r")
-                }
-            }
-            println("Done!")
-        }
         println("Mining block [${block.data}] ")
+        while (!block.isMined(difficultyPrefix)) {
+            block.nonce++
+            block.updateHash()
+            print("...\r")
+            print("   \r")
+        }
+        println("Done!")
     }
 
     /**
