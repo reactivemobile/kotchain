@@ -23,7 +23,12 @@ class BlockChain : LinkedList<Block>() {
 
     override fun toString(): String {
         val builder = StringBuilder()
-        forEachIndexed { index, block -> builder.append(index).append(": ").append(block).append('\n') }
+        forEachIndexed(fun(index: Int, block: Block) {
+            builder.append(block.getPrettyView(index))
+            if (index < size - 1) {
+                builder.append("\n").append(" ".repeat(15) + "|\n")
+            }
+        })
         return builder.toString()
     }
 }
