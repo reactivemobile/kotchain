@@ -39,4 +39,8 @@ hs_err_pid*
 .idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_core_1_0_1.xml
 .idea/libraries/Gradle__org_jetbrains_kotlinx_kotlinx_coroutines_core_common_1_0_1.xml
 .idea/modules/
-.idea/vcs.xml
+.idea/
+gradle/
+gradlew
+gradlew.bat
+kotchain.iml
