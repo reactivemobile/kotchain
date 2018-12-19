@@ -29,7 +29,8 @@ Mining block [GHI]
 Done!
 add JKL
 Mining block [JKL] 
-Done!```
+Done!
+```
 
 This mined and added 4 blocks to to the blockchain. This can be confirmed by entering `print`:
 ```
