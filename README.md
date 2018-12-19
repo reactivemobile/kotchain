@@ -91,7 +91,7 @@ To demonstrate how tampering is clearly detected, use the `update` command to si
 update 2=XYZ
 Updated 2 with XYZ
 ```
-Now when we print the chain you can see how the hashes in blocks 4 and above have been changed.
+Now when we print the chain you can see how the hashes in blocks 2 and above have been changed.
 
 ```
 print
