@@ -34,12 +34,18 @@ class Block(private val timestamp: Long, var data: String) {
         return hash.startsWith(difficultyPrefix)
     }
 
-    /**
-     * Get basic block details including truncated versions of the hash and previousHash
-     */
-    override fun toString(): String {
-        return "Block [data=$data hash=${hash.substring(0, 6)}..." +
-                " previousHash=${if (previousHash.length >= 6) previousHash.substring(0, 6) else previousHash}... " +
-                "nonce=$nonce]"
+    fun getPrettyView(index: Int): Any {
+        val topBottomLine = "*".repeat(30)
+        val line0 = wrapPrettyPrint("Index:", index.toString())
+        val line1 = wrapPrettyPrint("Data:", data)
+        val line2 = wrapPrettyPrint("Hash:", hash)
+        val line3 = wrapPrettyPrint("Previous hash:", previousHash)
+        val line4 = wrapPrettyPrint("Nonce:", nonce.toString())
+
+        return "$topBottomLine\n$line0\n$line1\n$line2\n$line3\n$line4\n$topBottomLine"
+    }
+
+    private fun wrapPrettyPrint(string: String, value: String): String {
+        return "* " + (string.padEnd(16) + value.take(8)).padEnd(27, ' ') + "*"
     }
 }

@@ -2,7 +2,7 @@ package kotchain
 
 // Difficulty will determine how easily a block can be mined.
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
-private const val difficulty = 5
+private const val difficulty = 4
 
 private const val command_add = "add "
 private const val command_exit = "exit"
@@ -22,8 +22,8 @@ fun main(args: Array<String>) {
 }
 
 private fun addGenesisBlock() {
-    print("Adding Genesis block... ")
-    addBlock("<GENESIS BLOCK>")
+    println("Adding Genesis block... ")
+    addBlock("")
 }
 
 private fun listenForInput() {
@@ -90,6 +90,6 @@ private fun showInstructions() {
     println("update:  <block number>=<data>:            Update the data in a block")
     println("mine-all:                                  Mine all the blocks in the chain")
     println("reset:                                     Remove all blocks from the chain")
-    println("exit:                                      Exit the demo")
+    println("exit:                                      Exit the demo\n")
 }
 
