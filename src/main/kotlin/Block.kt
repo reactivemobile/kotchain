@@ -17,6 +17,8 @@ class Block(private val timestamp: Long, var data: String) {
     var previousHash = hashUnset
     var hash = hashUnset
     var nonce = nonceUnset
+    var difficultyPrefix = ""
+
     private val digest = MessageDigest.getInstance("SHA-256")!!
 
     private fun doHash(): String {
@@ -30,22 +32,23 @@ class Block(private val timestamp: Long, var data: String) {
         hash = doHash()
     }
 
-    fun isMined(difficultyPrefix: String): Boolean {
+    fun isMined(): Boolean {
         return hash.startsWith(difficultyPrefix)
     }
 
     fun getPrettyView(index: Int): Any {
-        val topBottomLine = "*".repeat(30)
+        val topLine = '\u2554' + "\u2550".repeat(30) + '\u2557'
+        val bottomLine = '\u255A' + "\u2550".repeat(30) + '\u255D'
         val line0 = wrapPrettyPrint("Index:", index.toString())
         val line1 = wrapPrettyPrint("Data:", data)
         val line2 = wrapPrettyPrint("Hash:", hash)
         val line3 = wrapPrettyPrint("Previous hash:", previousHash)
         val line4 = wrapPrettyPrint("Nonce:", nonce.toString())
 
-        return "$topBottomLine\n$line0\n$line1\n$line2\n$line3\n$line4\n$topBottomLine"
+        return "$topLine\n$line0\n$line1\n$line2\n$line3\n$line4\n$bottomLine"
     }
 
     private fun wrapPrettyPrint(string: String, value: String): String {
-        return "* " + (string.padEnd(16) + value.take(8)).padEnd(27, ' ') + "*"
+        return "\u2551 " + (string.padEnd(20) + value.take(8)).padEnd(29, ' ') + "\u2551"
     }
 }
