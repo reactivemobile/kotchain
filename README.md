@@ -10,7 +10,7 @@ Instructions
 ------------
 add <string data>:                         Create a block, mine it and add to the blockchain
 verify:                                    Check the integrity of the blockchain
-print:                                     Show the contents of the entire blockchain
+print-blocks:                              Show the contents of the entire blockchain
 update: <block number>=<data>:             Update the data in a block
 mine-all:                                  Mine all the blocks in the chain
 reset:                                     Remove all blocks from the chain
@@ -32,9 +32,9 @@ Mining block [JKL]
 Done!
 ```
 
-This mined and added 4 blocks to to the blockchain. This can be confirmed by entering `print`:
+This mined and added 4 blocks to to the blockchain. This can be confirmed by running `print-blocks`:
 ```
-print
+print-blocks
 
 ╔══════════════════════════════╗
 ║ Index:              0        ║
@@ -100,7 +100,7 @@ Updated 2 with XYZ
 Now when we print the chain you can see how the hashes in blocks 2 and above have been changed.
 
 ```
-print
+print-blocks
 ╔══════════════════════════════╗
 ║ Index:              0        ║
 ║ Data:                        ║
