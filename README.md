@@ -35,45 +35,51 @@ Done!
 This mined and added 4 blocks to to the blockchain. This can be confirmed by entering `print`:
 ```
 print
-******************************
-* Index:          0          *
-* Data:                      *
-* Hash:           0000B44A   *
-* Previous hash:             *
-* Nonce:          119824     *
-******************************
-               |
-******************************
-* Index:          1          *
-* Data:           ABC        *
-* Hash:           0000C8A4   *
-* Previous hash:  0000B44A   *
-* Nonce:          70931      *
-******************************
-               |
-******************************
-* Index:          2          *
-* Data:           DEF        *
-* Hash:           0000ED29   *
-* Previous hash:  0000C8A4   *
-* Nonce:          30616      *
-******************************
-               |
-******************************
-* Index:          3          *
-* Data:           GHI        *
-* Hash:           000056B1   *
-* Previous hash:  0000ED29   *
-* Nonce:          59710      *
-******************************
-               |
-******************************
-* Index:          4          *
-* Data:           JKL        *
-* Hash:           00007AF6   *
-* Previous hash:  000056B1   *
-* Nonce:          32516      *
-******************************
+
+╔══════════════════════════════╗
+║ Index:              0        ║
+║ Data:                        ║
+║ Hash:               0000C15E ║
+║ Previous hash:               ║
+║ Nonce:              52778    ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              1        ║
+║ Data:               ABC      ║
+║ Hash:               0000D643 ║
+║ Previous hash:      0000C15E ║
+║ Nonce:              198767   ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              2        ║
+║ Data:               DEF      ║
+║ Hash:               0000E2E6 ║
+║ Previous hash:      0000D643 ║
+║ Nonce:              49249    ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              3        ║
+║ Data:               GHI      ║
+║ Hash:               00008DF7 ║
+║ Previous hash:      0000E2E6 ║
+║ Nonce:              122879   ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              4        ║
+║ Data:               JKL      ║
+║ Hash:               0000DDE1 ║
+║ Previous hash:      00008DF7 ║
+║ Nonce:              9210     ║
+╚══════════════════════════════╝
+
 ```
 You can see each block has been [mined](https://en.bitcoin.it/wiki/Nonce) (each hash has 4 leading zero characters) and a nonce calculated. Note the `previousHash` field of each block matches the `hash` field of the previous block. This is one of the core concepts of the blockchain. If one block is modified then the hash change is propagated up the chain making the following blocks invalid.
 
@@ -95,45 +101,49 @@ Now when we print the chain you can see how the hashes in blocks 2 and above hav
 
 ```
 print
-******************************
-* Index:          0          *
-* Data:                      *
-* Hash:           0000B44A   *
-* Previous hash:             *
-* Nonce:          119824     *
-******************************
-               |
-******************************
-* Index:          1          *
-* Data:           ABC        *
-* Hash:           0000C8A4   *
-* Previous hash:  0000B44A   *
-* Nonce:          70931      *
-******************************
-               |
-******************************
-* Index:          2          *
-* Data:           XYZ        *
-* Hash:           3FB70B50   *
-* Previous hash:  0000C8A4   *
-* Nonce:          30616      *
-******************************
-               |
-******************************
-* Index:          3          *
-* Data:           GHI        *
-* Hash:           DF61DC23   *
-* Previous hash:  3FB70B50   *
-* Nonce:          59710      *
-******************************
-               |
-******************************
-* Index:          4          *
-* Data:           JKL        *
-* Hash:           08903A32   *
-* Previous hash:  DF61DC23   *
-* Nonce:          32516      *
-******************************
+╔══════════════════════════════╗
+║ Index:              0        ║
+║ Data:                        ║
+║ Hash:               0000C15E ║
+║ Previous hash:               ║
+║ Nonce:              52778    ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              1        ║
+║ Data:               ABC      ║
+║ Hash:               0000D643 ║
+║ Previous hash:      0000C15E ║
+║ Nonce:              198767   ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              2        ║
+║ Data:               XYZ      ║
+║ Hash:               C7B8226E ║
+║ Previous hash:      0000D643 ║
+║ Nonce:              49249    ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              3        ║
+║ Data:               GHI      ║
+║ Hash:               099A0BE7 ║
+║ Previous hash:      C7B8226E ║
+║ Nonce:              122879   ║
+╚══════════════════════════════╝
+                |
+                ▼
+╔══════════════════════════════╗
+║ Index:              4        ║
+║ Data:               JKL      ║
+║ Hash:               98B0D792 ║
+║ Previous hash:      099A0BE7 ║
+║ Nonce:              9210     ║
+╚══════════════════════════════╝
 ```
 Now when we `verify`, the node knows something has been changed.
 ```

@@ -15,6 +15,7 @@ class Node(difficulty: Int) {
         if (blockChain.size > 0) {
             block.previousHash = blockChain.last().hash
         }
+        block.difficultyPrefix = difficultyPrefix
         mine(block)
         blockChain.add(block)
     }
@@ -40,7 +41,7 @@ class Node(difficulty: Int) {
     }
 
     fun verify() {
-        blockChain.verify(difficultyPrefix)
+        blockChain.verify()
     }
 
     /**
@@ -49,7 +50,7 @@ class Node(difficulty: Int) {
      */
     private fun mine(block: Block) {
         println("Mining block [${block.data}] ")
-        while (!block.isMined(difficultyPrefix)) {
+        while (!block.isMined()) {
             block.nonce++
             block.updateHash()
             print("...\r")
