@@ -25,6 +25,7 @@ class Node(difficulty: Int) {
      */
     fun reset() {
         blockChain.clear()
+        print("Node reset... ")
     }
 
     /**

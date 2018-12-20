@@ -10,18 +10,21 @@ import javax.xml.bind.DatatypeConverter
  * @property data Some arbitrary string data to store in the block
  *
  */
+const val cardWidth = 30
+
 class Block(private val timestamp: Long, var data: String) {
     private val hashUnset = ""
+    private val prefixUnset = ""
     private val nonceUnset = -1
 
     var previousHash = hashUnset
     var hash = hashUnset
     var nonce = nonceUnset
-    var difficultyPrefix = ""
+    var difficultyPrefix = prefixUnset
 
     private val digest = MessageDigest.getInstance("SHA-256")!!
 
-    private fun doHash(): String {
+    private fun calculateHash(): String {
         val content = "$timestamp$data$previousHash$nonce"
         digest.update(content.toByteArray(Charsets.UTF_8))
         val hashBytes = digest.digest()
@@ -29,7 +32,7 @@ class Block(private val timestamp: Long, var data: String) {
     }
 
     fun updateHash() {
-        hash = doHash()
+        hash = calculateHash()
     }
 
     fun isMined(): Boolean {
@@ -37,18 +40,18 @@ class Block(private val timestamp: Long, var data: String) {
     }
 
     fun getPrettyView(index: Int): Any {
-        val topLine = '\u2554' + "\u2550".repeat(30) + '\u2557'
-        val bottomLine = '\u255A' + "\u2550".repeat(30) + '\u255D'
+        val topLine = '\u2554' + "\u2550".repeat(cardWidth) + '\u2557'
+        val bottomLine = '\u255A' + "\u2550".repeat(cardWidth) + '\u255D'
         val line0 = wrapPrettyPrint("Index:", index.toString())
         val line1 = wrapPrettyPrint("Data:", data)
         val line2 = wrapPrettyPrint("Hash:", hash)
         val line3 = wrapPrettyPrint("Previous hash:", previousHash)
         val line4 = wrapPrettyPrint("Nonce:", nonce.toString())
 
-        return "$topLine\n$line0\n$line1\n$line2\n$line3\n$line4\n$bottomLine"
+        return "$topLine\n$line0$line1$line2$line3$line4$bottomLine"
     }
 
     private fun wrapPrettyPrint(string: String, value: String): String {
-        return "\u2551 " + (string.padEnd(20) + value.take(8)).padEnd(29, ' ') + "\u2551"
+        return "\u2551 " + (string.padEnd(cardWidth - 10) + value.take(cardWidth - 22)).padEnd(cardWidth - 1, ' ') + "\u2551\n"
     }
 }
