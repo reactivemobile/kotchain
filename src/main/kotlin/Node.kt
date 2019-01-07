@@ -7,12 +7,14 @@ class Node(difficulty: Int) {
 
     private val difficultyPrefix = "0".repeat(difficulty)
     private val blockChain: BlockChain = BlockChain()
+    private val size = { blockChain.size }
 
     /**
      * Add a block. If it's not the first block to be added we update the 'previousHash' field.
      */
-    fun add(block: Block) {
-        if (blockChain.size > 0) {
+    fun addBlock(data: String) {
+        val block = Block(System.currentTimeMillis(), data, size())
+        if (size() > 0) {
             block.previousHash = blockChain.last().hash
         }
         block.difficultyPrefix = difficultyPrefix
@@ -91,7 +93,7 @@ class Node(difficulty: Int) {
      * Update the 'previousHash' field of the next block with the 'hash' field of this block
      */
     private fun propagatePreviousHash(index: Int) {
-        if (index < blockChain.size - 1) {
+        if (index < size() - 1) {
             blockChain[index + 1].previousHash = blockChain[index].hash
         }
     }

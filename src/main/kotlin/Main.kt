@@ -64,7 +64,7 @@ private fun verify() {
 
 private fun addBlock(input: String) {
     val data = input.substringAfter(command_add)
-    node.add(Block(System.currentTimeMillis(), data))
+    node.addBlock(data)
 }
 
 private fun reset() {
