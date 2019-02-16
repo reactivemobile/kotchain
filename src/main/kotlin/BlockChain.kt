@@ -21,16 +21,4 @@ class BlockChain : LinkedList<Block>() {
             }
         }
     }
-
-    override fun toString(): String {
-        val builder = StringBuilder()
-        val gap = " ".repeat(cardWidth / 2)
-        forEachIndexed(fun(index: Int, block: Block) {
-            builder.append(block)
-            if (index < size - 1) {
-                builder.append("\n$gap|\n$gap\u25BC\n")
-            }
-        })
-        return builder.toString()
-    }
 }

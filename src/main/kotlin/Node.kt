@@ -76,7 +76,7 @@ class Node(difficulty: Int) {
      * Get the contents of the blockchain as a String
      */
     override fun toString(): String {
-        return blockChain.toString()
+        return blockChain.getDebugString()
     }
 
     /**
