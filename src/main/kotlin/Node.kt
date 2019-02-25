@@ -3,10 +3,10 @@ package kotchain
 /**
  * A Node holds a single blockchain and performs operations on it
  */
-class Node(difficulty: Int) {
+class Node(difficulty: Int, val logger: Logger) {
 
     private val difficultyPrefix = "0".repeat(difficulty)
-    private val blockChain: BlockChain = BlockChain()
+    private val blockChain: BlockChain = BlockChain(logger)
     private val size = { blockChain.size }
 
     /**
@@ -27,7 +27,7 @@ class Node(difficulty: Int) {
      */
     fun reset() {
         blockChain.clear()
-        print("Node reset... ")
+        logger.print("Node reset... ")
     }
 
     /**
@@ -52,14 +52,14 @@ class Node(difficulty: Int) {
      * characters. The number if zeros needed is set by the difficulty parameter
      */
     private fun mine(block: Block) {
-        println("Mining block [${block.data}] ")
+        logger.println("Mining block [${block.data}] ")
         while (!block.isMined()) {
             block.nonce++
             block.updateHash()
-            print("...\r")
-            print("   \r")
+            logger.print("...\r")
+            logger.print("   \r")
         }
-        println("Done!")
+        logger.println("Done!")
     }
 
     /**

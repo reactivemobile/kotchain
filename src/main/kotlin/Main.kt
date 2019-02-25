@@ -14,7 +14,17 @@ private const val command_mine_all = "mine-all"
 
 private const val equals_sign = "="
 
-private val node = Node(difficulty)
+private val logger: Logger = object : Logger {
+    override fun print(message: String) {
+        System.out.print(message)
+    }
+
+    override fun println(message: String) {
+        System.out.println(message)
+    }
+}
+
+private val node = Node(difficulty, logger)
 
 fun main(args: Array<String>) {
     showInstructions()
@@ -23,7 +33,7 @@ fun main(args: Array<String>) {
 }
 
 private fun addGenesisBlock() {
-    println("Adding Genesis block... ")
+    logger.println("Adding Genesis block... ")
     addBlock("")
 }
 
@@ -46,7 +56,7 @@ private fun handleInput(input: String) {
         input == command_exit -> return
         input.startsWith(command_add) -> addBlock(input)
         input.startsWith(command_update) -> updateBlock(input)
-        else -> println("Sorry I didn't understand\n")
+        else -> logger.println("Sorry I didn't understand\n")
     }
 }
 
@@ -76,20 +86,20 @@ private fun updateBlock(input: String) {
     val blockInt = input.substringAfter(command_update).substringBefore(equals_sign).toInt()
     val newData = input.substringAfter(equals_sign)
     if (node.updateBlockData(blockInt, newData)) {
-        println("Updated block #$blockInt with $newData")
+        logger.println("Updated block #$blockInt with $newData")
     } else {
-        println("Error block $blockInt doesn't exist")
+        logger.println("Error block $blockInt doesn't exist")
     }
 }
 
 private fun showInstructions() {
-    println("\nInstructions\n------------")
-    println("add <string data>:                         Create a block, mine it and add to the blockchain")
-    println("verify:                                    Check the integrity of the blockchain")
-    println("print-blocks:                              Show the contents of the entire blockchain")
-    println("update:  <block number>=<data>:            Update the data in a block")
-    println("mine-all:                                  Mine all the blocks in the chain")
-    println("reset:                                     Remove all blocks from the chain")
-    println("exit:                                      Exit the demo\n")
+    logger.println("\nInstructions\n------------")
+    logger.println("add <string data>:                         Create a block, mine it and add to the blockchain")
+    logger.println("verify:                                    Check the integrity of the blockchain")
+    logger.println("print-blocks:                              Show the contents of the entire blockchain")
+    logger.println("update:  <block number>=<data>:            Update the data in a block")
+    logger.println("mine-all:                                  Mine all the blocks in the chain")
+    logger.println("reset:                                     Remove all blocks from the chain")
+    logger.println("exit:                                      Exit the demo\n")
 }
 
