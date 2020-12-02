@@ -2,31 +2,31 @@ package kotchain
 
 // Difficulty will determine how easily a block can be mined.
 // '4' will take a second or two on a 2.8 GHz Intel Core i5
-private const val difficulty = 4
+private const val DIFFICULTY = 4
 
-private const val command_add = "add "
-private const val command_exit = "exit"
-private const val command_verify = "verify"
-private const val command_print = "print-blocks"
-private const val command_update = "update "
-private const val command_reset = "reset"
-private const val command_mine_all = "mine-all"
+private const val ADD = "add "
+private const val EXIT = "exit"
+private const val VERIFY = "verify"
+private const val PRINT = "print-blocks"
+private const val UPDATE = "update "
+private const val RESET = "reset"
+private const val MINE_ALL = "mine-all"
 
-private const val equals_sign = "="
+private const val EQUALS_SIGN = "="
 
 private val logger: Logger = object : Logger {
     override fun print(message: String) {
-        System.out.print(message)
+        kotlin.io.print(message)
     }
 
     override fun println(message: String) {
-        System.out.println(message)
+        kotlin.io.println(message)
     }
 }
 
-private val node = Node(difficulty, logger)
+private val node = Node(DIFFICULTY, logger)
 
-fun main(args: Array<String>) {
+fun main() {
     showInstructions()
     addGenesisBlock()
     listenForInput()
@@ -44,18 +44,18 @@ private fun listenForInput() {
         input?.let {
             handleInput(input)
         }
-    } while (input != command_exit)
+    } while (input != EXIT)
 }
 
 private fun handleInput(input: String) {
     when {
-        input == command_verify -> verify()
-        input == command_print -> print()
-        input == command_reset -> reset()
-        input == command_mine_all -> mineAll()
-        input == command_exit -> return
-        input.startsWith(command_add) -> addBlock(input)
-        input.startsWith(command_update) -> updateBlock(input)
+        input == VERIFY -> node.verify()
+        input == PRINT -> print()
+        input == RESET -> reset()
+        input == MINE_ALL -> mineAll()
+        input == EXIT -> return
+        input.startsWith(ADD) -> addBlock(input)
+        input.startsWith(UPDATE) -> updateBlock(input)
         else -> logger.println("Sorry I didn't understand\n")
     }
 }
@@ -68,12 +68,8 @@ private fun print() {
     println(node.toString())
 }
 
-private fun verify() {
-    node.verify()
-}
-
 private fun addBlock(input: String) {
-    val data = input.substringAfter(command_add)
+    val data = input.substringAfter(ADD)
     node.addBlock(data)
 }
 
@@ -83,8 +79,8 @@ private fun reset() {
 }
 
 private fun updateBlock(input: String) {
-    val blockInt = input.substringAfter(command_update).substringBefore(equals_sign).toInt()
-    val newData = input.substringAfter(equals_sign)
+    val blockInt = input.substringAfter(UPDATE).substringBefore(EQUALS_SIGN).toInt()
+    val newData = input.substringAfter(EQUALS_SIGN)
     if (node.updateBlockData(blockInt, newData)) {
         logger.println("Updated block #$blockInt with $newData")
     } else {
@@ -102,4 +98,3 @@ private fun showInstructions() {
     logger.println("reset:                                     Remove all blocks from the chain")
     logger.println("exit:                                      Exit the demo\n")
 }
-

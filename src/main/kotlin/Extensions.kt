@@ -1,29 +1,29 @@
 package kotchain
 
-const val cardWidth = 30
-const val horizontalLineChar = "\u2550"
-const val verticalLineChar = "\u2551"
-const val topLeft = "\u2554"
-const val topRight = "\u2557"
-const val bottomLeft = "\u255A"
-const val bottomRight = "\u255D"
+const val CARD_WIDTH = 30
+const val HORIZONTAL_LINE_CHAR = "\u2550"
+const val VERTICAL_LINE_CHAR = "\u2551"
+const val TOP_LEFT = "\u2554"
+const val TOP_RIGHT = "\u2557"
+const val BOTTOM_LEFT = "\u255A"
+const val BOTTOM_RIGHT = "\u255D"
 
 fun BlockChain.getDebugString(): String {
     val builder = StringBuilder()
-    val gap = " ".repeat(cardWidth / 2)
-    forEachIndexed(fun(index: Int, block: Block) {
+    val gap = " ".repeat(CARD_WIDTH / 2)
+    forEachIndexed { index, block ->
         builder.append(block.getDebugString())
         if (index < size - 1) {
             builder.append("\n$gap|\n$gap\u25BC\n")
         }
-    })
+    }
     return builder.toString()
 }
 
 fun Block.getDebugString(): String {
-    val horizontalLine = horizontalLineChar.repeat(cardWidth)
-    val topLine = "$topLeft$horizontalLine$topRight"
-    val bottomLine = "$bottomLeft$horizontalLine$bottomRight"
+    val horizontalLine = HORIZONTAL_LINE_CHAR.repeat(CARD_WIDTH)
+    val topLine = "$TOP_LEFT$horizontalLine$TOP_RIGHT"
+    val bottomLine = "$BOTTOM_LEFT$horizontalLine$BOTTOM_RIGHT"
 
     val line0 = wrapPrettyPrint("Index:", index.toString())
     val line1 = wrapPrettyPrint("Data:", data)
@@ -35,5 +35,8 @@ fun Block.getDebugString(): String {
 }
 
 private fun wrapPrettyPrint(string: String, value: String): String {
-    return "$verticalLineChar ${(string.padEnd(cardWidth - 10) + value.take(cardWidth - 22)).padEnd(cardWidth - 1, ' ')}$verticalLineChar\n"
+    return "$VERTICAL_LINE_CHAR ${
+        (string.padEnd(CARD_WIDTH - 10) + value.take(CARD_WIDTH - 22))
+                .padEnd(CARD_WIDTH - 1, ' ')
+    }$VERTICAL_LINE_CHAR\n"
 }

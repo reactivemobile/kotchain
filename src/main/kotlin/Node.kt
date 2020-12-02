@@ -3,7 +3,7 @@ package kotchain
 /**
  * A Node holds a single blockchain and performs operations on it
  */
-class Node(difficulty: Int, val logger: Logger) {
+class Node(difficulty: Int, private val logger: Logger) {
 
     private val difficultyPrefix = "0".repeat(difficulty)
     private val blockChain: BlockChain = BlockChain(logger)

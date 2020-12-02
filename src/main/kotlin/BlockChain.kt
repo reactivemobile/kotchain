@@ -5,7 +5,7 @@ import java.util.*
 /**
  * A class wrapping a chain of blocks, in this case implemented using a linked list
  */
-class BlockChain(val logger: Logger) : LinkedList<Block>() {
+class BlockChain(private val logger: Logger) : LinkedList<Block>() {
 
     /**
      * Check that the blockchain hasn't been tampered with. We do this by calculating the hash of the block. If it's
